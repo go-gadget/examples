@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	. "github.com/go-gadget/gadget"
 	"github.com/go-gadget/gadget/j"
 	"github.com/go-gadget/gadget/vtree"
@@ -109,7 +110,7 @@ func (g *SampleComponent) Doit() {
 func main() {
 	fmt.Println("Go Go Gadget!")
 
-	g := NewGadget(vtree.NewDomBridge())
+	g := NewGadget(vtree.Builder())
 
 	go g.MainLoop()
 	component := NewComponent()
