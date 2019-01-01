@@ -40,7 +40,7 @@ func BuildSampleComponent() ComponentInf {
 
 	s := &SampleComponent{
 		Todos:     []string{"First entry!", "Second Entry!"},
-		SomeValue: "Worst",
+		SomeValue: "Some value",
 		Color:     "red",
 		NewTODO:   "x",
 	}
@@ -56,34 +56,21 @@ func (g *SampleComponent) Data() interface{} {
 }
 
 func (g *SampleComponent) Template() string {
-	// could also be part of SampleComponent creation?
-	// return `
-	// <h1>TODO app</h1>
-	// <input type="text" g-bind="NewTODO">
-	// <button g-click="add_todo">Add</button>
-	// <ul>
-	//   <li g-for="todo in Todos">
-	//     {{todo}}
-	//   </li>
-	// </ul>
-	// `
-
 	return `<div id="rootdiv">
-	<b {{if .Color }}class="{{.Color}}"{{end}} id="h1-1">{{.SomeValue}} {{.Frop}} </b>
+	<b g-class="Color" id="h1-1">
+	  <g-tag g-value="SomeValue">1</g-tag>
+	  <g-tag g-value="Frop">2</g-tag>
+	</b>
 	<br>
 	<input id="input-1" type="text" g-bind="NewTODO">
 	<button id="button-1" g-click="add_todo">Add</button>
-	{{ if .Show }}
-	<i id="div-2" class="red">
+	<i id="div-2" class="red" g-if="Show">
 	 Hello!
 	</i>
-	{{ end }}
-	<ul id="ul-1">
-	  {{range $i, $e := .Todos}}
-	  <li id="li-{{$i}}">
-	    {{.}}
+	<ul>
+	  <li g-for="Todos" g-value="_">
+	    A todo
 	  </li>
-	  {{end}}
 	</ul>
 	</div>`
 }
@@ -105,7 +92,7 @@ func (g *SampleComponent) Doit() {
 	g.Todos = append(g.Todos, g.NewTODO)
 	j.J("add_todo called", g.Todos)
 	// g.NewTODO = fmt.Sprintf("And another entry %d", i)
-	g.SomeValue = "Kaas"
+	g.SomeValue = "Completely different"
 	g.Frop = i + 1000
 	g.Show = i%2 == 1
 
