@@ -57,14 +57,14 @@ func (g *SampleComponent) Data() interface{} {
 
 func (g *SampleComponent) Template() string {
 	return `<div id="rootdiv">
-	<b g-class="Color" id="h1-1">
+	<b g-class="Color">
 	  <g-tag g-value="SomeValue">1</g-tag>
 	  <g-tag g-value="Frop">2</g-tag>
 	</b>
 	<br>
-	<input id="input-1" type="text" g-bind="NewTODO">
-	<button id="button-1" g-click="add_todo">Add</button>
-	<i id="div-2" class="red" g-if="Show">
+	<input type="text" g-bind="NewTODO">
+	<button g-click="add_todo">Add</button>
+	<i class="red" g-if="Show">
 	 Hello!
 	</i>
 	<ul>
