@@ -98,7 +98,7 @@ func (g *SampleComponent) Doit() {
 	}
 }
 
-func SampleComponentFactory() ComponentInf {
+func SampleComponentFactory() Component {
 	s := &SampleComponent{}
 	return s
 }
