@@ -36,20 +36,11 @@ type SampleComponent struct {
 	i         int
 }
 
-func BuildSampleComponent() ComponentInf {
-	// create instance, do initialization if necessary
-
-	s := &SampleComponent{
-		Todos:     []string{"First entry!", "Second Entry!"},
-		SomeValue: "Some value",
-		Color:     "red",
-		NewTODO:   "x",
-	}
-
-	return s
-}
-
-func (g *SampleComponent) Init(chan string) {
+func (g *SampleComponent) Init() {
+	g.Todos = []string{"First entry!", "Second Entry!"}
+	g.SomeValue = "Some value"
+	g.Color = "red"
+	g.NewTODO = "x"
 }
 
 func (g *SampleComponent) Data() interface{} {
@@ -107,14 +98,18 @@ func (g *SampleComponent) Doit() {
 	}
 }
 
+func SampleComponentFactory() ComponentInf {
+	s := &SampleComponent{}
+	return s
+}
+
 func main() {
 	fmt.Println("Go Go Gadget!")
 
 	g := NewGadget(vtree.Builder())
 
 	go g.MainLoop()
-	component := NewComponent()
-	component.Build(BuildSampleComponent)
+	component := g.BuildComponent(SampleComponentFactory)
 
 	g.Mount(component)
 	select {}
