@@ -1,0 +1,87 @@
+package main
+
+import (
+	"fmt"
+
+	. "github.com/go-gadget/gadget"
+	"github.com/go-gadget/gadget/vtree"
+)
+
+/*
+ * ChildComponent - to be nested in Parent Component
+ */
+type ChildComponent struct {
+	Text string
+}
+
+func (g *ChildComponent) Init() {
+	g.Text = "Hello"
+}
+
+func (g *ChildComponent) Components() map[string]Builder {
+	return nil
+}
+
+func (g *ChildComponent) Data() interface{} {
+	return g
+}
+
+func (g *ChildComponent) Template() string {
+	return `
+	<button g-click="add_dot" g_value="Text">Add</button>
+	`
+}
+
+func (g *ChildComponent) Handlers() map[string]Handler {
+	return map[string]Handler{
+		"add_dot": func(Updates chan Action) {
+			g.Text = g.Text + "."
+		},
+	}
+}
+
+func ChildComponentFactory() Component {
+	s := &ChildComponent{}
+	return s
+}
+
+type ParentComponent struct {
+}
+
+func (g *ParentComponent) Init() {
+}
+
+func (g *ParentComponent) Components() map[string]Builder {
+	return map[string]Builder{"child-component": ChildComponentFactory}
+}
+
+func (g *ParentComponent) Data() interface{} {
+	return g
+}
+
+func (g *ParentComponent) Template() string {
+	return `<div><h1>Parent!</h1>
+	<child-component></child-component>
+	</div>
+	`
+}
+
+func (g *ParentComponent) Handlers() map[string]Handler {
+	return map[string]Handler{}
+}
+
+func ParentComponentFactory() Component {
+	s := &ParentComponent{}
+	return s
+}
+func main() {
+	fmt.Println("Go Go Gadget!")
+
+	g := NewGadget(vtree.Builder())
+
+	go g.MainLoop()
+	component := g.BuildComponent(ParentComponentFactory)
+
+	g.Mount(component, nil)
+	select {}
+}

@@ -36,6 +36,11 @@ type SampleComponent struct {
 	i         int
 }
 
+// Move this (and Data, etc) to some base struct/implementation
+func (g *SampleComponent) Components() map[string]Builder {
+	return nil
+}
+
 func (g *SampleComponent) Init() {
 	g.Todos = []string{"First entry!", "Second Entry!"}
 	g.SomeValue = "Some value"
