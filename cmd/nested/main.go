@@ -28,7 +28,7 @@ func (g *ChildComponent) Data() interface{} {
 
 func (g *ChildComponent) Template() string {
 	return `
-	<button g-click="add_dot" g_value="Text">Add</button>
+	<button g-click="add_dot" g-value="Text">Add</button>
 	`
 }
 
@@ -46,6 +46,7 @@ func ChildComponentFactory() Component {
 }
 
 type ParentComponent struct {
+	Show bool
 }
 
 func (g *ParentComponent) Init() {
@@ -61,13 +62,19 @@ func (g *ParentComponent) Data() interface{} {
 
 func (g *ParentComponent) Template() string {
 	return `<div><h1>Parent!</h1>
+	<button g-click="toggle">Toggle</button>
+	<child-component g-if="Show"></child-component>
 	<child-component></child-component>
 	</div>
 	`
 }
 
 func (g *ParentComponent) Handlers() map[string]Handler {
-	return map[string]Handler{}
+	return map[string]Handler{
+		"toggle": func(Updates chan Action) {
+			g.Show = !g.Show
+		},
+	}
 }
 
 func ParentComponentFactory() Component {
