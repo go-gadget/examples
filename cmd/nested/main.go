@@ -14,8 +14,11 @@ type ChildComponent struct {
 	Text string
 }
 
+var b int
+
 func (g *ChildComponent) Init() {
-	g.Text = "Hello"
+	g.Text = fmt.Sprintf("Hello-%d", b)
+	b++
 }
 
 func (g *ChildComponent) Components() map[string]Builder {
@@ -63,7 +66,7 @@ func (g *ParentComponent) Data() interface{} {
 func (g *ParentComponent) Template() string {
 	return `<div><h1>Parent!</h1>
 	<button g-click="toggle">Toggle</button>
-	<child-component g-if="Show"></child-component>
+	<child-component g-if="Show"></child-component><br>
 	<child-component></child-component>
 	</div>
 	`
