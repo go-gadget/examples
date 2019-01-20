@@ -9,34 +9,21 @@ import (
 )
 
 /*
- * perhaps one day this will be a real gadget app
- * Assume this is a component, mounted somewhere in the router/page,
- * doing its thing
- */
-
-/*
- * Let's imagine the router will mount it this way
- *
- * router.add("/foo/:id", SampleComponent)
- *
- * This will call some hooks on the component (which implements this Hooks interface),
- * e.g. comp.created()
- * html = comp.render()
- * app.mount(parent, html)
- * .. and whenever something changes update the html?
+ * This is the most full-fledged example of what go-gadget can do
+ * (though it doesn't demonstrate nested components)
  */
 
 type SampleComponent struct {
 	Todos     []string
 	NewTODO   string
 	SomeValue string
-	Frop      int
+	Bar       int
 	Show      bool
 	Color     string
 	i         int
 }
 
-// Move this (and Data, etc) to some base struct/implementation
+// No nested components, yet
 func (g *SampleComponent) Components() map[string]Builder {
 	return nil
 }
@@ -56,7 +43,7 @@ func (g *SampleComponent) Template() string {
 	return `<div id="rootdiv">
 	<b g-class="Color">
 	  <g-tag g-value="SomeValue">1</g-tag>
-	  <g-tag g-value="Frop">2</g-tag>
+	  <g-tag g-value="Bar">2</g-tag>
 	</b>
 	<br>
 	<input type="text" g-bind="NewTODO">
@@ -90,7 +77,7 @@ func (g *SampleComponent) Doit() {
 	j.J("add_todo called", g.Todos)
 	// g.NewTODO = fmt.Sprintf("And another entry %d", i)
 	g.SomeValue = "Completely different"
-	g.Frop = i + 1000
+	g.Bar = i + 1000
 	g.Show = i%2 == 1
 
 	switch i % 3 {
@@ -111,11 +98,16 @@ func SampleComponentFactory() Component {
 func main() {
 	fmt.Println("Go Go Gadget!")
 
+	// Create the framework
 	g := NewGadget(vtree.Builder())
 
+	// Start the mainloop
 	go g.MainLoop()
+
+	// Create a component
 	component := g.BuildComponent(SampleComponentFactory)
 
+	// Mount it on 'nil', making it the main component
 	g.Mount(component, nil)
 	select {}
 }
