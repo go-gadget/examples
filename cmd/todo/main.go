@@ -116,6 +116,6 @@ func main() {
 	go g.MainLoop()
 	component := g.BuildComponent(SampleComponentFactory)
 
-	g.Mount(component)
+	g.Mount(component, nil)
 	select {}
 }
