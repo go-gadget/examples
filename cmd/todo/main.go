@@ -12,6 +12,43 @@ import (
  * This is the most full-fledged example of what go-gadget can do
  * (though it doesn't demonstrate nested components)
  */
+type ChildComponent struct {
+	Text string
+}
+
+var b int
+
+func (g *ChildComponent) Init() {
+	g.Text = fmt.Sprintf("Child component %d - click me!", b)
+	b++
+}
+
+func (g *ChildComponent) Components() map[string]Builder {
+	return nil
+}
+
+func (g *ChildComponent) Data() interface{} {
+	return g
+}
+
+func (g *ChildComponent) Template() string {
+	return `
+	<button g-click="add_dot" g-value="Text">Add</button>
+	`
+}
+
+func (g *ChildComponent) Handlers() map[string]Handler {
+	return map[string]Handler{
+		"add_dot": func(Updates chan Action) {
+			g.Text = "*" + g.Text + "*"
+		},
+	}
+}
+
+func ChildComponentFactory() Component {
+	s := &ChildComponent{}
+	return s
+}
 
 type SampleComponent struct {
 	Todos     []string
@@ -21,11 +58,12 @@ type SampleComponent struct {
 	Show      bool
 	Color     string
 	i         int
+	c1        bool
+	c2        bool
 }
 
-// No nested components, yet
 func (g *SampleComponent) Components() map[string]Builder {
-	return nil
+	return map[string]Builder{"child-component": ChildComponentFactory}
 }
 
 func (g *SampleComponent) Init() {
@@ -56,6 +94,8 @@ func (g *SampleComponent) Template() string {
 	    A todo
 	  </li>
 	</ul>
+	<child-component g-if="c1"></child-component>
+	<child-component g-if="c2"></child-component>
 	</div>`
 }
 
@@ -83,10 +123,16 @@ func (g *SampleComponent) Doit() {
 	switch i % 3 {
 	case 0:
 		g.Color = "red"
+		g.c1 = true
+		g.c2 = false
 	case 1:
 		g.Color = "green"
+		g.c1 = false
+		g.c2 = true
 	case 2:
 		g.Color = ""
+		g.c1 = false
+		g.c2 = false
 	}
 }
 
