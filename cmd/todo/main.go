@@ -13,6 +13,7 @@ import (
  * (though it doesn't demonstrate nested components)
  */
 type ChildComponent struct {
+	BaseComponent
 	Text string
 }
 
@@ -21,14 +22,6 @@ var b int
 func (g *ChildComponent) Init() {
 	g.Text = fmt.Sprintf("Child component %d - click me!", b)
 	b++
-}
-
-func (g *ChildComponent) Components() map[string]Builder {
-	return nil
-}
-
-func (g *ChildComponent) Data() interface{} {
-	return g
 }
 
 func (g *ChildComponent) Template() string {
@@ -47,10 +40,12 @@ func (g *ChildComponent) Handlers() map[string]Handler {
 
 func ChildComponentFactory() Component {
 	s := &ChildComponent{}
+	s.SetupStorage(s)
 	return s
 }
 
 type SampleComponent struct {
+	BaseComponent
 	Todos     []string
 	NewTODO   string
 	SomeValue string
@@ -71,10 +66,6 @@ func (g *SampleComponent) Init() {
 	g.SomeValue = "Some value"
 	g.Color = "red"
 	g.NewTODO = "x"
-}
-
-func (g *SampleComponent) Data() interface{} {
-	return g
 }
 
 func (g *SampleComponent) Template() string {
@@ -138,6 +129,8 @@ func (g *SampleComponent) Doit() {
 
 func SampleComponentFactory() Component {
 	s := &SampleComponent{}
+	// s.BaseComponent = BaseComponent{Storage: s}
+	s.SetupStorage(s)
 	return s
 }
 
