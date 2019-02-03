@@ -11,6 +11,7 @@ import (
  * ChildComponent - to be nested in Parent Component
  */
 type ChildComponent struct {
+	BaseComponent
 	Text string
 }
 
@@ -19,14 +20,6 @@ var b int
 func (g *ChildComponent) Init() {
 	g.Text = fmt.Sprintf("Hello-%d", b)
 	b++
-}
-
-func (g *ChildComponent) Components() map[string]Builder {
-	return nil
-}
-
-func (g *ChildComponent) Data() interface{} {
-	return g
 }
 
 func (g *ChildComponent) Template() string {
@@ -45,22 +38,17 @@ func (g *ChildComponent) Handlers() map[string]Handler {
 
 func ChildComponentFactory() Component {
 	s := &ChildComponent{}
+	s.SetupStorage(s)
 	return s
 }
 
 type ParentComponent struct {
+	BaseComponent
 	Show bool
-}
-
-func (g *ParentComponent) Init() {
 }
 
 func (g *ParentComponent) Components() map[string]Builder {
 	return map[string]Builder{"child-component": ChildComponentFactory}
-}
-
-func (g *ParentComponent) Data() interface{} {
-	return g
 }
 
 func (g *ParentComponent) Template() string {
@@ -82,6 +70,7 @@ func (g *ParentComponent) Handlers() map[string]Handler {
 
 func ParentComponentFactory() Component {
 	s := &ParentComponent{}
+	s.SetupStorage(s)
 	return s
 }
 func main() {
