@@ -44,6 +44,24 @@ func ChildComponentFactory() Component {
 	return s
 }
 
+type TodoComponent struct {
+	BaseComponent
+}
+
+func (g *TodoComponent) Props() []string {
+	return []string{"Todo"}
+}
+
+func (g *TodoComponent) Template() string {
+	return `<span g-value="Todo">Some todo</span>`
+}
+
+func TodoComponentFactory() Component {
+	s := &TodoComponent{}
+	s.SetupStorage(s)
+	return s
+}
+
 type SampleComponent struct {
 	BaseComponent
 	Todos     []string
@@ -58,7 +76,10 @@ type SampleComponent struct {
 }
 
 func (g *SampleComponent) Components() map[string]Builder {
-	return map[string]Builder{"child-component": ChildComponentFactory}
+	return map[string]Builder{
+		"child-component": ChildComponentFactory,
+		"todo-component":  TodoComponentFactory,
+	}
 }
 
 func (g *SampleComponent) Init() {
@@ -81,8 +102,8 @@ func (g *SampleComponent) Template() string {
 	 Hello!
 	</i>
 	<ul>
-	  <li g-for="Todo in Todos" g-value="Todo">
-	    A todo
+	  <li g-for="Todo in Todos">
+		<todo-component g-bind:Todo="Todo"></todo-component>
 	  </li>
 	</ul>
 	<child-component g-if="c1"></child-component>
