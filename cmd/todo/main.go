@@ -81,7 +81,7 @@ func (g *SampleComponent) Template() string {
 	 Hello!
 	</i>
 	<ul>
-	  <li g-for="Todos" g-value="_">
+	  <li g-for="Todo in Todos" g-value="Todo">
 	    A todo
 	  </li>
 	</ul>
