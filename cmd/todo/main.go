@@ -144,7 +144,7 @@ func main() {
 	go g.MainLoop()
 
 	// Create a component
-	component := g.BuildComponent(SampleComponentFactory)
+	component := NewComponent(SampleComponentFactory)
 
 	// Mount it on 'nil', making it the main component
 	g.Mount(component)
