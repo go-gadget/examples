@@ -147,6 +147,6 @@ func main() {
 	component := g.BuildComponent(SampleComponentFactory)
 
 	// Mount it on 'nil', making it the main component
-	g.Mount(component, nil)
+	g.Mount(component)
 	select {}
 }
