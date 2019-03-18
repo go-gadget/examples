@@ -79,8 +79,8 @@ func main() {
 	g := NewGadget(vtree.Builder())
 
 	go g.MainLoop()
-	component := g.BuildComponent(ParentComponentFactory)
+	component := NewComponent(ParentComponentFactory)
 
-	g.Mount(component, nil)
+	g.Mount(component)
 	select {}
 }
