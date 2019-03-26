@@ -38,7 +38,7 @@ func (g *ChildComponent) Handlers() map[string]Handler {
 
 func ChildComponentFactory() Component {
 	s := &ChildComponent{}
-	s.SetupStorage(s)
+	s.SetupStorage(NewStructStorage(s))
 	return s
 }
 
@@ -70,7 +70,7 @@ func (g *ParentComponent) Handlers() map[string]Handler {
 
 func ParentComponentFactory() Component {
 	s := &ParentComponent{}
-	s.SetupStorage(s)
+	s.SetupStorage(NewStructStorage(s))
 	return s
 }
 func main() {
@@ -79,7 +79,7 @@ func main() {
 	g := NewGadget(vtree.Builder())
 
 	go g.MainLoop()
-	component := NewComponent(ParentComponentFactory)
+	component := g.NewComponent(ParentComponentFactory)
 
 	g.Mount(component)
 	select {}

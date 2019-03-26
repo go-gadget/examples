@@ -40,12 +40,13 @@ func (g *ChildComponent) Handlers() map[string]Handler {
 
 func ChildComponentFactory() Component {
 	s := &ChildComponent{}
-	s.SetupStorage(s)
+	s.SetupStorage(NewStructStorage(s))
 	return s
 }
 
 type TodoComponent struct {
 	BaseComponent
+	Todo string
 }
 
 func (g *TodoComponent) Props() []string {
@@ -58,7 +59,7 @@ func (g *TodoComponent) Template() string {
 
 func TodoComponentFactory() Component {
 	s := &TodoComponent{}
-	s.SetupStorage(s)
+	s.SetupStorage(NewStructStorage(s))
 	return s
 }
 
@@ -150,8 +151,7 @@ func (g *SampleComponent) Doit() {
 
 func SampleComponentFactory() Component {
 	s := &SampleComponent{}
-	// s.BaseComponent = BaseComponent{Storage: s}
-	s.SetupStorage(s)
+	s.SetupStorage(NewStructStorage(s))
 	return s
 }
 
@@ -165,7 +165,7 @@ func main() {
 	go g.MainLoop()
 
 	// Create a component
-	component := NewComponent(SampleComponentFactory)
+	component := g.NewComponent(SampleComponentFactory)
 
 	// Mount it on 'nil', making it the main component
 	g.Mount(component)
