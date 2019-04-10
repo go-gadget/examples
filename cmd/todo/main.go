@@ -19,7 +19,7 @@ type ChildComponent struct {
 
 var b int
 
-func (g *ChildComponent) Init() {
+func (g *ChildComponent) Init(*ComponentState) {
 	g.Text = fmt.Sprintf("Child component %d - click me!", b)
 	b++
 }
@@ -76,14 +76,14 @@ type SampleComponent struct {
 	c2        bool
 }
 
-func (g *SampleComponent) Components() map[string]Builder {
-	return map[string]Builder{
+func (g *SampleComponent) Components() map[string]ComponentFactory {
+	return map[string]ComponentFactory{
 		"child-component": ChildComponentFactory,
 		"todo-component":  TodoComponentFactory,
 	}
 }
 
-func (g *SampleComponent) Init() {
+func (g *SampleComponent) Init(*ComponentState) {
 	g.Todos = []string{"First entry!", "Second Entry!"}
 	g.SomeValue = "Some value"
 	g.Color = "red"

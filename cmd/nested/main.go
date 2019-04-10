@@ -17,7 +17,7 @@ type ChildComponent struct {
 
 var b int
 
-func (g *ChildComponent) Init() {
+func (g *ChildComponent) Init(*ComponentState) {
 	g.Text = fmt.Sprintf("Hello-%d", b)
 	b++
 }
@@ -47,8 +47,8 @@ type ParentComponent struct {
 	Show bool
 }
 
-func (g *ParentComponent) Components() map[string]Builder {
-	return map[string]Builder{"child-component": ChildComponentFactory}
+func (g *ParentComponent) Components() map[string]ComponentFactory {
+	return map[string]ComponentFactory{"child-component": ChildComponentFactory}
 }
 
 func (g *ParentComponent) Template() string {
