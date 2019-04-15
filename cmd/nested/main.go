@@ -30,16 +30,19 @@ func (g *ChildComponent) Template() string {
 
 func (g *ChildComponent) Handlers() map[string]Handler {
 	return map[string]Handler{
-		"add_dot": func(Updates chan Action) {
+		"add_dot": func() {
 			g.Text = g.Text + "."
 		},
 	}
 }
 
-func ChildComponentFactory() Component {
-	s := &ChildComponent{}
-	s.SetupStorage(NewStructStorage(s))
-	return s
+var ChildComponentFactory = &ComponentFactory{
+	Name: "Child",
+	Builder: func() Component {
+		s := &ChildComponent{}
+		s.SetupStorage(NewStructStorage(s))
+		return s
+	},
 }
 
 type ParentComponent struct {
@@ -47,8 +50,8 @@ type ParentComponent struct {
 	Show bool
 }
 
-func (g *ParentComponent) Components() map[string]ComponentFactory {
-	return map[string]ComponentFactory{"child-component": ChildComponentFactory}
+func (g *ParentComponent) Components() map[string]*ComponentFactory {
+	return map[string]*ComponentFactory{"child-component": ChildComponentFactory}
 }
 
 func (g *ParentComponent) Template() string {
@@ -62,17 +65,21 @@ func (g *ParentComponent) Template() string {
 
 func (g *ParentComponent) Handlers() map[string]Handler {
 	return map[string]Handler{
-		"toggle": func(Updates chan Action) {
+		"toggle": func() {
 			g.Show = !g.Show
 		},
 	}
 }
 
-func ParentComponentFactory() Component {
-	s := &ParentComponent{}
-	s.SetupStorage(NewStructStorage(s))
-	return s
+var ParentComponentFactory = &ComponentFactory{
+	Name: "Parent",
+	Builder: func() Component {
+		s := &ParentComponent{}
+		s.SetupStorage(NewStructStorage(s))
+		return s
+	},
 }
+
 func main() {
 	fmt.Println("Go Go Gadget!")
 

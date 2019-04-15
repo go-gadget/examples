@@ -32,16 +32,19 @@ func (g *ChildComponent) Template() string {
 
 func (g *ChildComponent) Handlers() map[string]Handler {
 	return map[string]Handler{
-		"add_dot": func(Updates chan Action) {
+		"add_dot": func() {
 			g.Text = "*" + g.Text + "*"
 		},
 	}
 }
 
-func ChildComponentFactory() Component {
-	s := &ChildComponent{}
-	s.SetupStorage(NewStructStorage(s))
-	return s
+var ChildComponentFactory = &ComponentFactory{
+	Name: "ChildComponent",
+	Builder: func() Component {
+		s := &ChildComponent{}
+		s.SetupStorage(NewStructStorage(s))
+		return s
+	},
 }
 
 type TodoComponent struct {
@@ -57,10 +60,13 @@ func (g *TodoComponent) Template() string {
 	return `<span g-value="Todo">Some todo</span>`
 }
 
-func TodoComponentFactory() Component {
-	s := &TodoComponent{}
-	s.SetupStorage(NewStructStorage(s))
-	return s
+var TodoComponentFactory = &ComponentFactory{
+	Name: "TodoComponent",
+	Builder: func() Component {
+		s := &TodoComponent{}
+		s.SetupStorage(NewStructStorage(s))
+		return s
+	},
 }
 
 type SampleComponent struct {
@@ -76,8 +82,8 @@ type SampleComponent struct {
 	c2        bool
 }
 
-func (g *SampleComponent) Components() map[string]ComponentFactory {
-	return map[string]ComponentFactory{
+func (g *SampleComponent) Components() map[string]*ComponentFactory {
+	return map[string]*ComponentFactory{
 		"child-component": ChildComponentFactory,
 		"todo-component":  TodoComponentFactory,
 	}
@@ -114,7 +120,7 @@ func (g *SampleComponent) Template() string {
 
 func (g *SampleComponent) Handlers() map[string]Handler {
 	return map[string]Handler{
-		"add_todo": func(Updates chan Action) {
+		"add_todo": func() {
 			g.Doit()
 		},
 	}
@@ -149,10 +155,13 @@ func (g *SampleComponent) Doit() {
 	}
 }
 
-func SampleComponentFactory() Component {
-	s := &SampleComponent{}
-	s.SetupStorage(NewStructStorage(s))
-	return s
+var SampleComponentFactory = &ComponentFactory{
+	Name: "Sample",
+	Builder: func() Component {
+		s := &SampleComponent{}
+		s.SetupStorage(NewStructStorage(s))
+		return s
+	},
 }
 
 func main() {
